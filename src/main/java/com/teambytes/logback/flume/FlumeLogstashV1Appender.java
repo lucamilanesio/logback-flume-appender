@@ -1,6 +1,7 @@
 package com.teambytes.logback.flume;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.core.Layout;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 import org.apache.commons.lang.StringUtils;
@@ -211,6 +212,11 @@ public class FlumeLogstashV1Appender extends UnsynchronizedAppenderBase<ILogging
 
     if (StringUtils.isNotEmpty(type)) {
       headers.put("type", type);
+    }
+
+    IThrowableProxy throwable = eventObject.getThrowableProxy();
+    if(throwable != null) {
+      headers.put("exceptionClass", throwable.getClassName());
     }
 
     return headers;
